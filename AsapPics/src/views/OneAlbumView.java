@@ -1,0 +1,258 @@
+package views;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import listeners.OneAlbumViewOnClickListener;
+import listeners.OneAlbumViewOnLongClickListener;
+import misc.AsyncCallbackResult;
+
+import business.SharingConnection;
+
+import com.example.asappics.R;
+
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.util.Log;
+import android.util.SparseArray;
+import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.Toast;
+import async.AddPictureAsyncCallback;
+import async.LoadThumbAsyncCallback;
+
+public class OneAlbumView extends Activity {
+
+	private GridView gridView;
+	private List<Integer> imageIdList;
+	private long albumId;
+	private String albumName;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_one_album_view);
+		
+		/* Paramètre de la vue */
+		Intent intent = getIntent();
+        albumId = intent.getLongExtra("albumId", -1);
+        albumName = intent.getStringExtra("albumName");
+        
+        setTitle(albumName);
+        
+        /* Instanciation des objets */
+        imageIdList = new ArrayList<Integer>();
+		gridView = (GridView) findViewById(R.id.one_album_grid_view);
+		
+		/* Chargement asynchrone des images */
+        (new LoadPicturesAsyncCallback()).execute();
+	}
+	
+	/**
+	 * Charge la liste des id des images de l'album d'id 'albumId'.
+	 * @author Alex
+	 *
+	 */
+	private class LoadPicturesAsyncCallback extends AsyncTask<Void, Void, Integer> {
+
+		@Override
+		protected Integer doInBackground(Void... params) {
+			try {
+				imageIdList = SharingConnection.getAlbum((int) albumId).getImages();
+			} catch(Exception e) {
+				Log.e("AsyncTaskException", "Album_View.java::LoadPicturesAsyncCallback: " + e.toString());
+				return AsyncCallbackResult.EXCEPTION;
+			}
+			return AsyncCallbackResult.TRUE;
+		}
+		
+		@Override
+		public void onPostExecute(Integer result) {
+			if (result == AsyncCallbackResult.EXCEPTION) {
+	        	Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_network_error), Toast.LENGTH_LONG).show();
+	        } else {
+	        	refreshAdapter();
+	        }
+		}
+		
+	}
+	
+	private void refreshAdapter() {
+		ImageAdapter imageAdapter = new ImageAdapter(this, imageIdList);
+		gridView.setAdapter(imageAdapter);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.one_album_view_menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.one_album_view_add_picture_menu_item) {
+			
+			/* Ouvre la gallerie photos */
+			Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+			photoPickerIntent.setType("image/*");
+			startActivityForResult(photoPickerIntent, 1);
+			
+			return true;
+		} else if (item.getItemId() == R.id.one_album_view_refresh_menu_item) {
+			
+			new LoadPicturesAsyncCallback().execute();
+			
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Callback. Récupère la photo sélectionnée dans la gallerie par le Photo Picker et lance un thread pour l'uploader.
+	 */
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+	    super.onActivityResult(requestCode, resultCode, data);
+	    
+	    if (resultCode == RESULT_OK)
+	    {
+	        Uri chosenImageUri = data.getData();
+	        Bitmap image = null;
+	        
+	        try {
+				image = Media.getBitmap(this.getContentResolver(), chosenImageUri);
+			} catch (Exception e) {}
+	        
+	        /* Lancement thread pour upload */
+	        if (image != null) {
+	        	
+	        	/* Nom de l'image + extension */
+	        	String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(chosenImageUri, filePathColumn, null, null, null);
+	        	cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String filePath = cursor.getString(columnIndex);
+                String fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length());
+                
+	        	new AddPictureAsyncCallback(this, (ImageAdapter) gridView.getAdapter(), albumId, fileName, image).execute();
+	        	
+	        }
+	    }
+	}
+	
+	/**
+	 * Adapter pour la liste de widgets
+	 * @author Alex
+	 *
+	 */
+	public class ImageAdapter extends BaseAdapter {
+	    private Context mContext;
+	    private List<Integer> mThumbIds;
+	    private SparseArray<View> views;
+
+	    public ImageAdapter(Context c, List<Integer> images) {
+	        mContext = c;
+			mThumbIds = images;
+	        views = new SparseArray<View>();
+	    }
+
+	    @Override
+		public int getCount() {
+	        return mThumbIds.size();
+	    }
+
+	    @Override
+		public Object getItem(int position) {
+	        return mThumbIds.get(position);
+	    }
+
+	    @Override
+		public long getItemId(int position) {
+	        return position;
+	    }
+	    
+	    public List<Integer> getImageList() {
+	    	return mThumbIds;
+	    }
+	    
+	    public SparseArray<View> getViews() {
+	    	return views;
+	    }
+
+	    /**
+	     * Crée un nouvel ImageView avec chargement asynchrone, ou la récupère
+	     * dans le HashMap s'il existe déjà
+	     */
+	    @Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+	    	/* Dimensions de l'écran */
+	    	Point p = new Point();
+	    	Display display = getWindowManager().getDefaultDisplay();
+//	    	display.getSize(p); // Uniquement API level >= 17
+//	    	int size = p.x/3;
+	    	int size = display.getWidth() / 3;
+	    	
+//	    	/* Vue à utiliser */
+//	        ImageView imageView = (ImageView) views.get(position);
+//	        
+//	        if (imageView == null) {
+//	            imageView = new ImageView(mContext);
+//	            
+//	            /* Paramètres grid layout */
+//	            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//	            imageView.setLayoutParams(new GridView.LayoutParams(size, size));
+//	            	            
+//	            /* Listener */
+//	            imageView.setOnClickListener(new OneAlbumViewOnClickListener(mContext, (long) imageIdList.get(position), albumId));
+//	            imageView.setOnLongClickListener(new OneAlbumViewOnLongClickListener(mContext, this, position, albumId));
+//	            
+//	            /* Garde la vue dans un tableau */
+//	            views.put(position, imageView);
+//	            
+//	            /* Bundle et lancement d'un thread pour chargement asynchrone de l'image */
+//	            Bundle bundle = new Bundle();
+//	            bundle.putInt("imageId", (int) mThumbIds.get(position));
+//	            bundle.putInt("albumId", (int) albumId);
+//	            
+//	            (new LoadThumbAsyncCallback(imageView)).execute(bundle);
+//	        }
+	    		        
+	        if (convertView == null) {
+	            convertView = new ImageView(mContext);
+	            
+	            /* Paramètres grid layout */
+	            ((ImageView) convertView).setScaleType(ImageView.ScaleType.CENTER_CROP);
+	            convertView.setLayoutParams(new GridView.LayoutParams(size, size));
+	            	            
+	            /* Listener */
+	            convertView.setOnClickListener(new OneAlbumViewOnClickListener(mContext, (long) imageIdList.get(position), albumId));
+	            convertView.setOnLongClickListener(new OneAlbumViewOnLongClickListener(mContext, this, position, albumId));
+	        }
+	        
+	        /* Bundle et lancement d'un thread pour chargement asynchrone de l'image */
+            Bundle bundle = new Bundle();
+            bundle.putInt("imageId", (int) mThumbIds.get(position));
+            bundle.putInt("albumId", (int) albumId);
+	        
+	        (new LoadThumbAsyncCallback((ImageView) convertView)).execute(bundle);
+	        
+	        return convertView;
+	    }
+	}
+}

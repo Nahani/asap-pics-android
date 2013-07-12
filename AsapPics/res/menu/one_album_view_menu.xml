@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/one_album_view_add_picture_menu_item"
+        android:orderInCategory="1"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/new_picture"
+        android:title="@string/add_picture_menu_title"/>
+    
+    <item
+        android:id="@+id/one_album_view_refresh_menu_item"
+		android:icon="@drawable/refresh"
+        android:orderInCategory="2"
+        android:showAsAction="always"
+        android:title="@string/refresh_string" />
+
+</menu>

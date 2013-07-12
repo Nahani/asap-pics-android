@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="album_view_option_array">
+        <item >Supprimer</item>
+    </string-array>
+    <string-array name="one_album_view_option_array">
+        <item >Supprimer</item>
+        <item>Télécharger</item>
+    </string-array>   
+</resources>

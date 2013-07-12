@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="connection_string">Connexion</string>
+    <string name="app_name">AsapPics</string>
+    <string name="username_string">Nom d\'utilisateur</string>
+    <string name="password_string">Mot de passe</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="last_name_string">Nom</string>
+    <string name="first_name_string">Prénom</string>
+    <string name="email_string">Email</string>
+    <string name="subscribe_string">S\'inscrire</string>
+    <string name="create_account_string">Créer un compte</string>
+    <string name="subscribe_title">Inscription</string>
+    <string name="add_album_dialog_title">Nouvel album</string>
+    <string name="add_album_text_field_hint">Nom de l\'album</string>
+    <string name="refresh_string">Rafraîchir</string>
+    <string name="delete_string">Supprimer</string>
+    <string name="download_string">Télécharger</string>
+    <string name="disconnect_string">Déconnecter</string>
+
+    <color name="title_gray">#9E9E9E</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_show_picture">ShowPictureActivity</string>
+    
+    <string name="show_picture_content_description">Image centrale :)</string>
+    <string name="title_subscribe">Inscription</string>
+    <string name="title_activity_album_view">Vos albums</string>
+    <string name="menu_ajout_album">Ajouter un album</string>
+    <string name="menu_suppresion_album">Supprimer un album</string>
+    <string name="suppres_album_yes">Oui</string>
+    <string name="supress_album_no">Non</string>
+    <string name="supress_album">Voulez-vous vraiment supprimer cet album?</string>
+   
+    <!-- Messages -->
+    <string name="no_network_error">Impossible de se connecter au serveur</string>
+	<string name="account_created_message">Compte créé avec succès</string>
+	<string name="login_already_used_message">Login déjà utilisé</string>
+	<string name="blank_fields_message">Certains champs obligatoires sont vide</string>
+	<string name="login_error_message">Utilisateur inconnu. Certaines informations peuvent être erronnées</string>
+	
+	<string name="no_connectivity_message">Une connexion à internet est requise</string>
+	<string name="no_connectivity_title">Internet</string>
+	
+	<string name="suppression_photo">Supprimer</string>
+	<string name="telecharger_photo">Télécharger</string>
+	<string name="suppres_image_text_field_hint">Nom de l\'image</string>
+	
+	<string name="one_album_option_dialog_title">Options</string>
+	<string name="add_picture_menu_title">Ajouter une image</string>
+	
+	<string name="quit_message">Voulez-vous vraiment quitter?</string>
+	
+	<string name="delete_image_message">Voulez-vous supprimer cette image?</string>
+    
+</resources>
