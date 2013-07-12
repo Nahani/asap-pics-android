@@ -1,0 +1,7 @@
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/one_album_grid_view"
+    style="@style/picture_grid_style"
+    tools:context="views.OneAlbumView" >
+ 
+</GridView>
