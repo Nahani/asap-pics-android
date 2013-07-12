@@ -148,7 +148,12 @@ public class OneAlbumView extends Activity {
 	        	cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 String filePath = cursor.getString(columnIndex);
-                String fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length());
+                //Error sur Nexus 7
+                String fileName;
+                if(filePath != null)
+                	fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length());
+                else
+                	fileName = "Default";
                 
 	        	new AddPictureAsyncCallback(this, (ImageAdapter) gridView.getAdapter(), albumId, fileName, image).execute();
 	        	
