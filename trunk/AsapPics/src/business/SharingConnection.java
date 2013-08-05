@@ -28,7 +28,7 @@ public abstract class SharingConnection {
 		return thumb_cache;
 	}
 
-	synchronized public static void addImage(int idAlbum, String name, Bitmap img) throws Exception {
+	synchronized public static int addImage(int idAlbum, String name, Bitmap img) throws Exception {
 		WebServiceManager.add_image(idAlbum, name, img);
 		int imageId = WebServiceManager.get_image_ID(idAlbum, name);
 		
@@ -38,6 +38,8 @@ public abstract class SharingConnection {
 		
 		/* Met à jour la liste des images de l'album en cache */
 		albums_in_cache.get(idAlbum).getImages().add(imageId);
+		
+		return imageId;
 	}
 
 	synchronized public static boolean addAlbum(String name, int idProp) throws Exception {
