@@ -2,7 +2,6 @@ package views;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import listeners.OneAlbumViewOnClickListener;
 import listeners.OneAlbumViewOnLongClickListener;
 import misc.AsyncCallbackResult;
@@ -17,6 +16,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -33,7 +33,6 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
-import async.AddPictureAsyncCallback;
 import async.LoadThumbAsyncCallback;
 
 public class OneAlbumView extends Activity {
@@ -155,7 +154,8 @@ public class OneAlbumView extends Activity {
                 else
                 	fileName = "Default";
                 
-	        	new AddPictureAsyncCallback(this, (ImageAdapter) gridView.getAdapter(), albumId, fileName, image).execute();
+                new AddPictureAsyncCallback(albumId, fileName, image).execute();
+	
 	        	
 	        }
 	    }
@@ -199,6 +199,10 @@ public class OneAlbumView extends Activity {
 	    public SparseArray<View> getViews() {
 	    	return views;
 	    }
+	    
+	    public void addThumbID(int id){
+	    	mThumbIds.add(id);
+	    }
 
 	    /**
 	     * Crée un nouvel ImageView avec chargement asynchrone, ou la récupère
@@ -213,30 +217,6 @@ public class OneAlbumView extends Activity {
 //	    	int size = p.x/3;
 	    	int size = display.getWidth() / 3;
 	    	
-//	    	/* Vue à utiliser */
-//	        ImageView imageView = (ImageView) views.get(position);
-//	        
-//	        if (imageView == null) {
-//	            imageView = new ImageView(mContext);
-//	            
-//	            /* Paramètres grid layout */
-//	            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//	            imageView.setLayoutParams(new GridView.LayoutParams(size, size));
-//	            	            
-//	            /* Listener */
-//	            imageView.setOnClickListener(new OneAlbumViewOnClickListener(mContext, (long) imageIdList.get(position), albumId));
-//	            imageView.setOnLongClickListener(new OneAlbumViewOnLongClickListener(mContext, this, position, albumId));
-//	            
-//	            /* Garde la vue dans un tableau */
-//	            views.put(position, imageView);
-//	            
-//	            /* Bundle et lancement d'un thread pour chargement asynchrone de l'image */
-//	            Bundle bundle = new Bundle();
-//	            bundle.putInt("imageId", (int) mThumbIds.get(position));
-//	            bundle.putInt("albumId", (int) albumId);
-//	            
-//	            (new LoadThumbAsyncCallback(imageView)).execute(bundle);
-//	        }
 	    		        
 	        if (convertView == null) {
 	            convertView = new ImageView(mContext);
@@ -246,7 +226,7 @@ public class OneAlbumView extends Activity {
 	            convertView.setLayoutParams(new GridView.LayoutParams(size, size));
 	            	            
 	            /* Listener */
-	            convertView.setOnClickListener(new OneAlbumViewOnClickListener(mContext, (long) imageIdList.get(position), albumId));
+	            convertView.setOnClickListener(new OneAlbumViewOnClickListener(mContext, (long) mThumbIds.get(position), albumId));
 	            convertView.setOnLongClickListener(new OneAlbumViewOnLongClickListener(mContext, this, position, albumId));
 	        }
 	        
@@ -259,5 +239,65 @@ public class OneAlbumView extends Activity {
 	        
 	        return convertView;
 	    }
+	}
+	
+	private class AddPictureAsyncCallback extends AsyncTask<Void, Void, Integer> {
+
+		private Bitmap image;
+		private long albumId;
+		private int imageId;
+		private String name;
+		private ProgressDialog progressDialog;
+		
+		public AddPictureAsyncCallback(long albumId, String name, Bitmap image) {
+			this.image = image;
+			this.albumId = albumId;
+			this.name = name;
+			progressDialog = new ProgressDialog(OneAlbumView.this);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			progressDialog.setMessage("Téléversement de l'image");
+			progressDialog.show();
+		}
+		
+		@Override
+		protected Integer doInBackground(Void... params) {
+			try {
+				System.gc();
+				
+				/* Ajout sur le serveur puis désallocation du Bitmap */
+				SharingConnection.addImage((int) albumId, name, image);
+				
+				
+				return AsyncCallbackResult.TRUE;
+				
+			} catch (Exception e) {
+				Log.e("AsyncTask", "AddPictureAsyncCallback: " + e.toString());
+				return AsyncCallbackResult.EXCEPTION;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			
+			progressDialog.dismiss();
+			
+			if (result == AsyncCallbackResult.TRUE) {
+				image.recycle();
+				
+				System.gc();
+				
+				/* Rafraîchi la vue */
+				refreshAdapter();
+				
+				Toast.makeText(OneAlbumView.this, "Image ajoutée", Toast.LENGTH_LONG).show();
+				
+			} else if (result == AsyncCallbackResult.EXCEPTION) {
+				Toast.makeText(OneAlbumView.this, OneAlbumView.this.getResources().getString(R.string.no_network_error), Toast.LENGTH_LONG).show();
+			}
+		}
+		
 	}
 }
