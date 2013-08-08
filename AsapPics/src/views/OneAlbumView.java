@@ -220,15 +220,16 @@ public class OneAlbumView extends Activity {
 	    		        
 	        if (convertView == null) {
 	            convertView = new ImageView(mContext);
-	            
 	            /* Paramètres grid layout */
 	            ((ImageView) convertView).setScaleType(ImageView.ScaleType.CENTER_CROP);
 	            convertView.setLayoutParams(new GridView.LayoutParams(size, size));
-	            	            
-	            /* Listener */
-	            convertView.setOnClickListener(new OneAlbumViewOnClickListener(mContext, (long) mThumbIds.get(position), albumId));
-	            convertView.setOnLongClickListener(new OneAlbumViewOnLongClickListener(mContext, this, position, albumId));
-	        }
+	            
+	           
+	        }     
+	                  
+            /* Listener */
+            convertView.setOnClickListener(new OneAlbumViewOnClickListener(mContext, (long) mThumbIds.get(position), albumId));
+            convertView.setOnLongClickListener(new OneAlbumViewOnLongClickListener(mContext, this, position, albumId));
 	        
 	        /* Bundle et lancement d'un thread pour chargement asynchrone de l'image */
             Bundle bundle = new Bundle();
