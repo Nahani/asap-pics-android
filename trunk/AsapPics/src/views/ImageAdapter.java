@@ -2,7 +2,7 @@ package views;
 
 import business.ASAPImage;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 import android.content.Context;
 import android.content.Intent;

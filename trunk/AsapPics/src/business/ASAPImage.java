@@ -87,17 +87,10 @@ public class ASAPImage implements Parcelable {
 				+ File.separator 
 				+ name
 				);
-		Log.i("ASAP", f.getAbsolutePath());
-		Log.i("enregistrement", "j'ai le path");
 		f.createNewFile();
-		Log.i("enregistrement", "j'ai crée la file");
 		FileOutputStream fo = new FileOutputStream(f);
-		Log.i("enregistrement", "je commence la copie");
 		fo.write(bytes.toByteArray());
-		Log.i("enregistrement", "je finie la copie");
-
 		fo.close();
-		Log.i("ASAP", f.getAbsolutePath());
 		MediaStore.Images.Media.insertImage(r, f.getAbsolutePath(),
 				f.getName(), f.getName());
 	}
@@ -117,14 +110,10 @@ public class ASAPImage implements Parcelable {
 		
 		try
 		{
-			Log.i("enregistrement", "je créer le fichier");
 			file.createNewFile();
-			Log.i("enregistrement", "je créer le stream");
 			fos = new FileOutputStream(file.getAbsolutePath());
 			//BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
-			Log.i("enregistrement", "je compresse");
 			data.compress(CompressFormat.JPEG, 90, fos);
-			Log.i("enregistrement", "je finie la copie");
 			fos.flush();
 			fos.close();
 		}

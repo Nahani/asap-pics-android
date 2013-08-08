@@ -42,7 +42,6 @@ public class ImageService extends WebServiceUtil {
 		String response_string = "";
 		try {
 			response_string = jObject.getString(RESPONSE_TAG_GET_IMAGE_NAME);
-			Log.i("ASAP PICS", "Get_Image_NameResult - Reponse de la requete : " + response_string);
 		} catch (JSONException e) {
 			Log.e("ASAP PICS", "Get_Image_NameResult - Error : " + e.getMessage());
 			throw e;
@@ -56,7 +55,6 @@ public class ImageService extends WebServiceUtil {
 		int response_int = -1;
 		try {
 			response_int = jObject.getInt(RESPONSE_TAG_GET_IMAGE_ID);
-			Log.i("ASAP PICS", "Get_Image_IDResult - Reponse de la requete : " + response_int);
 		} catch (JSONException e) {
 			Log.e("ASAP PICS", "Get_Image_IDResult - Error : " + e.getMessage());
 			throw e;
@@ -74,7 +72,6 @@ public class ImageService extends WebServiceUtil {
 			for (int i=0; i<jsonArray.length(); i++) {
 				response_array.add(jsonArray.getInt(i));
 			}
-			Log.i("ASAP PICS", "Get_Images_ID_From_AlbumResult - Reponse de la requete : " + response_array);
 		} catch (JSONException e) {
 			Log.e("ASAP PICS", "Get_Images_ID_From_AlbumResult - Error : " + e.getMessage());
 			throw e;
@@ -148,7 +145,6 @@ public class ImageService extends WebServiceUtil {
 		boolean response_boolean = false;
 		try {
 			response_boolean = jObject.getBoolean(RESPONSE_TAG_DELETE);
-			Log.i("ASAP PICS", "deleteResult - Reponse de la requete : " + response_boolean);
 		} catch (JSONException e) {
 			Log.e("ASAP PICS", "deleteResult - Error : " + e.getMessage());
 			throw e;
