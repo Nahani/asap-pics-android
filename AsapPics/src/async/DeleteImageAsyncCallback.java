@@ -11,7 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 import business.SharingConnection;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 public class DeleteImageAsyncCallback extends AsyncTask<Void, Void, Integer> {
 	

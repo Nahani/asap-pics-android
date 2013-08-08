@@ -24,7 +24,6 @@ public class UserService extends WebServiceUtil {
 		boolean response_boolean = false;
 		try {
 			response_boolean = jObject.getBoolean(RESPONSE_TAG_GET_USER_LEVEL);
-			Log.i("ASAP PICS", "Get_User_Level_result - Reponse de la requete : " + String.valueOf(response_boolean));
 		} catch (JSONException e) {
 			Log.e("ASAP PICS", "Get_User_Level_result - Error : " + e.getMessage());
 			throw e;
@@ -38,7 +37,6 @@ public class UserService extends WebServiceUtil {
 		int response_int = -1;
 		try {
 			response_int = jObject.getInt(RESPONSE_TAG_GET_USER_ID);
-			Log.i("ASAP PICS", "Get_User_IDResult - Reponse de la requete : " + response_int);
 		} catch (JSONException e) {
 			Log.e("ASAP PICS", "Get_User_IDResult - Error : " + e.getMessage());
 			throw e;
@@ -52,7 +50,6 @@ public class UserService extends WebServiceUtil {
 		boolean response_boolean = false;
 		try {
 			response_boolean = jObject.getBoolean(RESPONSE_TAG_CHECK_PASSWORD);
-			Log.i("ASAP PICS", "Check_PasswordResult - Reponse de la requete : " + response_boolean);
 		} catch (Exception e) {
 			Log.e("ASAP PICS", "Check_PasswordResult - Error : " + e.getMessage());
 			throw e;
@@ -66,7 +63,6 @@ public class UserService extends WebServiceUtil {
 		boolean response_boolean = false;
 		try {
 			response_boolean = jObject.getBoolean(RESPONSE_TAG_ADD);
-			Log.i("ASAP PICS", "addResult - Reponse de la requete : " + response_boolean);
 		} catch (JSONException e) {
 			Log.e("ASAP PICS", "addResult - Error : " + e.getMessage());
 			throw e;
@@ -80,7 +76,6 @@ public class UserService extends WebServiceUtil {
 		boolean response_boolean = false;
 		try {
 			response_boolean = jObject.getBoolean(RESPONSE_TAG_DELETE);
-			Log.i("ASAP PICS", "deleteResult - Reponse de la requete : " + response_boolean);
 		} catch (JSONException e) {
 			Log.e("ASAP PICS", "deleteResult - Error : " + e.getMessage());
 			throw e;

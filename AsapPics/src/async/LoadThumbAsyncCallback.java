@@ -1,6 +1,6 @@
 package async;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 import misc.AsyncCallbackResult;
 import android.os.AsyncTask;

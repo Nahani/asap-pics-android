@@ -11,7 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 import business.ASAPUser;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 /**
  * Connexion au serveur. Contrôle des coordonnées utilisateur.

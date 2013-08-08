@@ -89,8 +89,6 @@ public class JSONParser {
 			Log.e("Buffer Error", "Error converting result " + e.toString());
 		}
 
-		Log.i("JSON Parser", json.toString());
-
 		if (!type.equals(Method_Type.PUT)) {
 			try {
 				jObj = new JSONObject(json);

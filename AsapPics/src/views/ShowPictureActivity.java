@@ -12,7 +12,7 @@ import business.ASAPImage;
 import business.ASAPUser;
 import business.SharingConnection;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 import android.os.AsyncTask;
 import android.os.Bundle;

@@ -13,7 +13,7 @@ import business.ASAPAlbum;
 import business.ASAPUser;
 import business.SharingConnection;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 public class DeleteAlbumAsyncCallback extends AsyncTask<Void, Void, Integer> {
 	

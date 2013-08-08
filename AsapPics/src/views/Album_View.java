@@ -11,7 +11,7 @@ import business.ASAPAlbum;
 import business.ASAPUser;
 import business.SharingConnection;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

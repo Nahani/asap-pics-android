@@ -4,7 +4,7 @@ import java.util.List;
 
 import views.OneAlbumView.ImageAdapter;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 import android.app.AlertDialog;
 import android.content.Context;

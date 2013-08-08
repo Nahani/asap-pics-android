@@ -8,7 +8,7 @@ import misc.AsyncCallbackResult;
 
 import business.SharingConnection;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 import android.net.Uri;
 import android.os.AsyncTask;

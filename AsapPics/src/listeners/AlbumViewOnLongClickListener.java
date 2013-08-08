@@ -2,7 +2,7 @@ package listeners;
 
 import views.Album_View.ImageAdapter;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -2,7 +2,7 @@ package views;
 
 import misc.AsyncCallbackResult;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

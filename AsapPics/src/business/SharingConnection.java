@@ -93,7 +93,6 @@ public abstract class SharingConnection {
 	
 	synchronized public static ASAPAlbum getAlbum(int idAlbum) throws Exception {
 		if (!albums_in_cache.containsKey(idAlbum)) {
-			Log.i("ASAP PICS", "je ne passe par le cache pour l'image " + idAlbum);
 			ASAPAlbum targeted = new ASAPAlbum(idAlbum,
 												WebServiceManager.get_album_name(idAlbum),
 												WebServiceManager.get_images_ID_from_album(idAlbum));
@@ -102,7 +101,6 @@ public abstract class SharingConnection {
 			
 			return targeted;
 		}
-		Log.i("ASAP PICS", "je passe par le cache pour l'image " + idAlbum);
 		return albums_in_cache.get(idAlbum);
 	}
 	

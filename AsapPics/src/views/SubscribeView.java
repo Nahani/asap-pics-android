@@ -5,7 +5,7 @@ import webservices.WebServiceManager;
 
 import business.ASAPUser;
 
-import com.example.asappics.R;
+import com.asappics.R;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
